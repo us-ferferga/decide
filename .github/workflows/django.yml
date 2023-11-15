@@ -5,7 +5,11 @@ on:
     branches:
       - develop
       - master
-
+  workflow_call:
+    secrets:
+      CODACY_PROJECT_TOKEN:
+        required: true
+        
 jobs:
   build:
     strategy:
