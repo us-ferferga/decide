@@ -1,0 +1,21 @@
+{
+    "name": "@decide",
+    "private": true,
+    "homepage": "https://github.com/us-ferferga/decide",
+    "bugs": {
+        "url": "https://github.com/us-ferferga/decide/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/us-ferferga/decide"
+    },
+    "license": "AGPL-3.0-or-later",
+    "workspaces": [
+        "decide/booth/frontend"
+    ],
+    "engines": {
+        "node": ">=20.8.1 <21.0.0",
+        "npm": ">=10.1.0",
+        "yarn": "Yarn is not supported. Please use NPM."
+    }
+}
