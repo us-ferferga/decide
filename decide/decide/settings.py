@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'corsheaders',
     'django_filters',
@@ -44,6 +45,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'gateway',
+    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
 ]
 
 REST_FRAMEWORK = {
@@ -56,6 +62,7 @@ REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = [
     'base.backends.AuthBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 MODULES = [
@@ -80,6 +87,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'decide.urls'
@@ -95,6 +104,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request'
             ],
         },
     },
@@ -180,3 +190,23 @@ if os.path.exists("config.jsonnet"):
 
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
+
+
+SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS ={
+    'github': {
+        'APP': {
+            'client_id': '6d8d4a160b9315473c07',
+            'secret': 'a123064978108829c46e8b6f36a3f99dc847f185',
+            'key': '',
+        }
+    }
+}
+
+LOGIN_URL='/accounts/login/'
+LOGIN_REDIRECT_URL='/authenticate/accounts'
+ACCOUNT_LOGOUT_REDIRECT_URL='/'
+
+SOCIALACCOUNT_STORE_TOKENS = True
+ACCOUNT_LOGOUT_ON_GET = True
