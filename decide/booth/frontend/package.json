@@ -6,11 +6,12 @@
     "scripts": {
         "analyze": "vite build --mode analyze",
         "build": "vite build",
-        "check": "npm run lint && npm run typecheck",
+        "check": "npm run lint && npm run typecheck && npm run knip",
         "start": "vite",
         "serve": "vite preview",
         "lint": "eslint . --max-warnings=0 --cache --cache-location node_modules/.cache/eslint",
         "lint-fix": "eslint . --fix --max-warnings=0 --cache --cache-location node_modules/.cache/eslint",
+        "knip": "knip",
         "prod": "npm run build && npm run serve",
         "typecheck": "vue-tsc --noEmit --skipLibCheck"
     },
@@ -47,6 +48,7 @@
         "eslint-plugin-unicorn": "48.0.1",
         "eslint-plugin-vue": "9.18.1",
         "eslint-plugin-vue-scoped-css": "2.5.1",
+        "knip": "2.41.2",
         "lightningcss": "1.22.1",
         "rollup-plugin-visualizer": "5.9.2",
         "typescript": "5.2.2",
