@@ -9,8 +9,8 @@
         "check": "npm run lint && npm run typecheck",
         "start": "vite",
         "serve": "vite preview",
-        "lint": "eslint . --ignore-path ../.gitignore --max-warnings=0 --cache --cache-location ../node_modules/.cache/eslint",
-        "lint-fix": "eslint . --fix --ignore-path ../.gitignore --max-warnings=0 --cache --cache-location ../node_modules/.cache/eslint",
+        "lint": "eslint . --max-warnings=0 --cache --cache-location node_modules/.cache/eslint",
+        "lint-fix": "eslint . --fix --max-warnings=0 --cache --cache-location node_modules/.cache/eslint",
         "prod": "npm run build && npm run serve",
         "typecheck": "vue-tsc --noEmit --skipLibCheck"
     },
