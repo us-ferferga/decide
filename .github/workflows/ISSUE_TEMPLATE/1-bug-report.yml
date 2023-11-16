@@ -1,0 +1,65 @@
+name: 🪲 Reportar error
+description: Informar de un error o regresión en el uso. 
+labels: [bug]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por tu interés en mejorar decide!
+
+        Antes de continuar, verifica que [no existe un reporte de error](https://github.com/us-ferferga/decide) que coincida con el tuyo.
+  - type: textarea
+    attributes:
+      label: ✍️ Descripción
+      description: Una descripción clara y concisa del problema.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🚶Pasos para reproducir
+      description: Explica cómo podemos reproducirlo
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ Comportamiento esperado
+      description: Una descripción clara y concisa del comportamiento deseado.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📃Registros
+      description: Si es relevante, proporciona registros (tanto del servidor como del cliente) que nos puedan servir para identificar el problema.
+      render: text
+  - type: textarea
+    attributes:
+      label: 📷 Capturas de pantalla
+      description: Si aplica, capturas de pantalla que ayuden a explicar el problema.
+  - type: dropdown
+    attributes:
+      label: 🖥️ Platforma del servidor
+      description: Plataforma en la que estás corriendo el backend de decide.
+      options:
+        - Linux
+        - Windows
+        - macOS
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: 🌐Navegador del cliente
+      description: Navegador con el que estás accediendo a decide.
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Edge
+        - Otro (Por favor, especifica cuál en la sección "contexto adicional")
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✨ Contexto adicional
+      description: Si lo crees necesario, proporciona otra información que pueda ser relevante.
+      render: text

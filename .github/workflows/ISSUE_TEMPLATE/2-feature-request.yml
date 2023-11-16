@@ -1,0 +1,39 @@
+name: 💡 Sugerencias
+description: Proponer nuevas características Informar de un error o regresión en el uso. 
+labels: [enhancement]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por tu interés en mejorar decide!
+
+        Antes de continuar, verifica que [no existe una propuesta](https://github.com/us-ferferga/decide) similar a la tuya.
+  - type: textarea
+    attributes:
+      label: ✍️ Descripción
+      description: Una descripción clara y concisa de lo que propones.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🚶¿Cómo podemos llevarla a cabo?
+      description: Si se te ocurre como podemos gestionar y planificar la implementación de tu propuesta, por favor, descríbelo aquí.
+    validations:
+      required: false
+  - type: dropdown
+    attributes:
+      label: 🧩 Subsistema
+      description: Si conoces el(los) subsistema(s) que hay que modificar para llevar a cabo tu propuesta, selecciónalos aquí. Puedes ver [una lista](https://github.com/us-ferferga/decide/blob/master/doc/subsistemas.md)
+      multiple: true
+      options:
+        - Autenticacion
+        - Censo
+        - Votaciones
+        - Cabina de votación
+        - Almacenamiento de votos (cifrados)
+        - Recuento / MixNet
+        - Postprocesado
+        - Visualización de resultados
+    validations:
+      required: false
