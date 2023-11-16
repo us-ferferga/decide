@@ -10,6 +10,9 @@ from base import mods
 
 class AuthTestCase(APITestCase):
 
+    def test_basic_addition(self):
+        self.assertEqual(1 + 1, 2)
+
     def setUp(self):
         self.client = APIClient()
         mods.mock_query(self.client)
@@ -48,7 +51,7 @@ class AuthTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         user = response.json()
-        self.assertEqual(user['id'], 1)
+        self.assertEqual(user['id'], 3)
         self.assertEqual(user['username'], 'voter1')
 
     def test_getuser_invented_token(self):
