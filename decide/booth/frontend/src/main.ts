@@ -14,6 +14,9 @@ import router from '@/plugins/router';
  * - GLOBAL STYLES -
  */
 import 'virtual:uno.css';
+import '@unocss/reset/normalize.css';
+import '@unocss/reset/sanitize/sanitize.css';
+import '@unocss/reset/sanitize/assets.css';
 
 /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
 const app = createApp(Root);

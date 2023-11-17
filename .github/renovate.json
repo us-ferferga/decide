@@ -37,6 +37,8 @@
             "dependencyDashboardApproval": true
         }
     ],
+    "enabled": true,
+    "forkProcessing": "enabled",
     "dependencyDashboard": true,
     "prConcurrentLimit": 0,
     "prHourlyLimit": 0,
