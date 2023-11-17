@@ -29,5 +29,6 @@
         "vue": "html"
     },
     "vue.autoInsert.dotValue": true,
-    "vue.server.fullCompletionList": true
+    "vue.server.fullCompletionList": true,
+    "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"]
 }
