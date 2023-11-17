@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator
 
 from base import mods
 from base.models import Auth, Key
@@ -40,8 +41,10 @@ class Voting(models.Model):
     auths = models.ManyToManyField(Auth, related_name='votings')
 
     model = models.CharField(max_length=8, choices=[('IDENTITY','Identity'), ('DHONDT', "D'hondt")], default= 'IDENTITY')
-    seats = models.PositiveIntegerField(blank=True, null=True)
-
+    seats = models.PositiveIntegerField(
+        default=2,
+        validators=[MinValueValidator(2, message="El número de asientos debe ser como mínimo 2.")]
+)
 
     tally = JSONField(blank=True, null=True)
     postproc = JSONField(blank=True, null=True)
