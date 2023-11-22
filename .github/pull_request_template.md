@@ -10,7 +10,7 @@ Fixes # (issue)
 - [ ] *Bugfix* (cambios compatibles que arreglan un error)
 - [ ] Nueva característica (cambios compatibles que añaden funcionalidades)
 - [ ] Mejora de característica (cambios compatibles que mejoran funcionalidades ya existentes)
-- [ ] Cambio incompatible (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Cambio incompatible (arreglo o característica que cambia radicalmente el funcionamiento esperado)
 - [ ] Este cambio requiere de una actualización de la documentación.
 
 #### 🧪 ¿Cómo se ha probado?
