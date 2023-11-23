@@ -25,7 +25,6 @@ class ObtainSocialAuthTokenView(APIView):
         userid = request.data.get('userid', '')
         user = get_object_or_404(User,id=userid)
 
-        # socialtoken = SocialToken.objects.get(account__user=request.user, account__provider='github')
         token, created = Token.objects.get_or_create(user=user)
 
         return Response({'token': token.key})
