@@ -1,0 +1,36 @@
+ci:
+  - '.github/**/**'
+
+authentication:
+  - 'decide/authentication/**/**'
+
+store:
+  - 'decide/store/**/**'
+
+booth:
+  - 'decide/booth/**/**'
+
+census:
+  - 'decide/census/**/**'
+
+mixnet:
+  - 'decide/mixnet/**/**'
+
+postproc:
+  - 'decide/postproc/**/**'
+
+visualizer:
+  - 'decide/visualizer/**/**'
+
+voting:
+  - 'decide/voting/**/**'
+
+base:
+  - 'decide/base/**/**'
+
+tests:
+  - any:
+      [
+        'decide/**/tests.py',
+        'decide/**/*test*'
+      ]
