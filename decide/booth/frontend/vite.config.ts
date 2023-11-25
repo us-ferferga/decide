@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from 'node:url';
+import { resolve } from 'node:path';
 import { defineConfig, UserConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import Icons from 'unplugin-icons/vite';
@@ -100,7 +100,7 @@ export default defineConfig(({ mode }): UserConfig => {
     },
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('src', import.meta.url))
+        '@': `${resolve('src')}`
       }
     },
     worker: {

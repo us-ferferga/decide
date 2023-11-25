@@ -1,6 +1,13 @@
+interface RouteTransition {
+  enter: string;
+  leave?: string;
+}
+
 declare module 'vue-router' {
   interface RouteMeta {
+    layout: 'default';
     title?: string | null;
+    transition?: RouteTransition;
   }
 }
 

@@ -18,7 +18,9 @@ module.exports = {
   reportUnusedDisableDirectives: true,
   ignorePatterns: [
     'types/global/routes.d.ts',
-    'types/global/components.d.ts'
+    'types/global/components.d.ts',
+    'dist',
+    'node_modules'
   ],
   extends: [
     'eslint:recommended',
@@ -86,7 +88,7 @@ module.exports = {
     'no-secrets/no-secrets': 'error',
     'import/newline-after-import': 'error',
     'import/order': 'error',
-    'import/no-unresolved': ['error', { ignore: ['virtual:*'] }],
+    'import/no-unresolved': ['error', { ignore: ['virtual:*', 'vue-router/auto/*'] }],
     'import/no-extraneous-dependencies': [
       'error',
       {
