@@ -3,11 +3,17 @@ import {
   createRouter,
   createWebHashHistory
 } from 'vue-router/auto';
+import metaGuard from './middlewares/meta';
 import { useTitle } from '@vueuse/core';
 
 const router = createRouter({
   history: createWebHashHistory()
 });
+
+/**
+ * Middlewares
+ */
+router.beforeEach(metaGuard);
 
 /**
  * Handle page title changes
