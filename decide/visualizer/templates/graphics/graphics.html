@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+    <link type="text/css" rel="stylesheet"
+         href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="{% static "visualizer/graphics.css" %}" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="app-graphics">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">Decide</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                </div>
+            </div>
+        </nav>   
+        
+        <div class="voting-container mt-3 ms-5">
+            <h1>Estadísticas de la votación</h1>
+        </div>
+
+        <div class="voting div-visualizer-button mt-3 ms-5">
+            <button class="btn btn-secondary" onclick="removeGraphicsAndRedirect()">
+                Volver a los resultados
+            </button>
+        </div>
+
+        <!-- Result study-->
+        <div class="voting div-results mt-3 ms-5">
+            <div id="winnerResult" class="mb-2"></div>
+            <div id="totalVotesResult"></div>
+        </div>
+             
+        <div class="row">
+            <!-- Bar Chart Column -->
+            <div class="col-md-6">
+                <div class="div-bar-graph">
+                    <canvas id="barGraph"></canvas>
+                </div>
+            </div>
+    
+            <!-- Pie Chart Column -->
+            <div class="col-md-6">
+                <div class="div-pie-graph">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function removeGraphicsAndRedirect() {
+                var currentUrl = window.location.href;
+                var modifiedUrl = currentUrl.replace(/\/graphics\/.*/, '');
+                window.location.href = modifiedUrl;
+            }
+        
+            function createBarChart() {
+                const barGraph = document.querySelector("#barGraph");
+                const barLabels = [{% for opt in results %} '{{opt.option}}', {% endfor %}];
+                const barData = {
+                    labels: barLabels,
+                    datasets: [{
+                        label: "Número de votos",
+                        data: [{% for val in results %} '{{val.votes}}', {% endfor %}],
+                        backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                const barConfig = {
+                    type: 'bar',
+                    data: barData,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                };
+                new Chart(barGraph, barConfig);
+            }
+        
+            function createPieChart() {
+                const pieChart = document.querySelector("#pieChart");
+                const pieLabels = [{% for opt in results %} '{{opt.option}}', {% endfor %}];
+                const pieData = {
+                    labels: pieLabels,
+                    datasets: [{
+                        data: [{% for val in results %} '{{val.votes}}', {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                const pieConfig = {
+                    type: 'pie',
+                    data: pieData
+                };
+                new Chart(pieChart, pieConfig);
+            }
+        
+            function getWinner(results) {
+                const allVotesZero = results.every(result => result.votes === 0);
+                if (results.length === 0 || allVotesZero) {
+                    return 'No hay registros de votos';
+                }
+
+                const sortedResults = results.slice().sort((a, b) => b.votes - a.votes);
+                const maxVotes = sortedResults[0].votes;
+                const topResults = sortedResults.filter(result => result.votes === maxVotes);
+                if (topResults.length === 1) {
+                    return `Opción ganadora de la votación: ${topResults[0].option}`;
+                } else {
+                    const tiedOptions = topResults.map(result => result.option);
+                    return `Empate entre ${tiedOptions.join(', ')}`;
+                }
+            }
+
+            function getTotalVotes(results) {
+                let totalCount = 0;
+                results.forEach((result) => {
+                    totalCount += parseInt(result.votes);
+                });
+                return `Total de votos: ${totalCount}`;
+            }
+        
+            createBarChart();
+            createPieChart();
+
+            const results = {{ results|safe }};
+            const winner = getWinner(results);
+            const totalVotes = getTotalVotes(results);
+            document.getElementById('winnerResult').innerText = `${winner}`;
+            document.getElementById('totalVotesResult').innerText = `${totalVotes}`;
+        </script>
+    </div>
+{% endblock %}

@@ -1,4 +1,11 @@
-.div-bar-graph {
-    width: 600px;
-    height: 600px;
+.div-bar-graph,
+.div-pie-graph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65vh;
+    width: 85vh;
 }
+
+
+

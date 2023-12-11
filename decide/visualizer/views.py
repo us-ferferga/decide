@@ -2,7 +2,7 @@ import json
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404, HttpResponse
-from django.template import loader 
+from django.shortcuts import render
 
 from base import mods
 
@@ -22,12 +22,12 @@ class VisualizerView(TemplateView):
 
         return context
     
-def graphics(request, voting_id):
-    template = loader.get_template("graphics.html")
-    r = mods.get('voting', params={'id': voting_id}) 
-    context = {
-        "voting_id": r[0].get('id'),
-        "voting_name": r[0].get('name'),
-        "results": r[0].get('postproc')
-    }
-    return HttpResponse(template.render(context, request))
+    def graphics(request, voting_id):
+        template_graphics = 'graphics/graphics.html'
+        r = mods.get('voting', params={'id': voting_id}) 
+        context = {
+            "voting_id": r[0].get('id'),
+            "voting_name": r[0].get('name'),
+            "results": r[0].get('postproc')
+        }
+        return render(request, template_graphics, context)
