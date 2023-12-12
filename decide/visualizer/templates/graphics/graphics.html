@@ -4,7 +4,7 @@
 {% block extrahead %}
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
-    <link type="text/css" rel="stylesheet" href="{% static "visualizer/graphics.css" %}" />
+    <link type="text/css" rel="stylesheet" href="{% static "graphics/graphics.css" %}" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
 {% endblock %}
 
@@ -31,26 +31,43 @@
             </button>
         </div>
 
-        <!-- Result study-->
-        <div class="voting div-results mt-3 ms-5">
-            <div id="winnerResult" class="mb-2"></div>
-            <div id="totalVotesResult"></div>
-        </div>
-             
         <div class="row">
+            <div class="col-md-4" id="dataChartContainer">
+                <!-- Chart Selector -->
+                <div class="voting div-chart-selector mt-3 ms-5">
+                    <label for="chartType">Seleccione el tipo de gráfico:</label>
+                    <select id="chartType" onchange="toggleCharts()">
+                        <option value="pie">Gráfico de Pastel</option>
+                        <option value="bar">Gráfico de Barras</option>
+                    </select>
+                </div>
+                <!-- Result study-->
+                <div class="voting div-results mt-3 ms-5">
+                    <table>
+                        <thead>
+                            <tr><th>Datos de los resultados</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td id="winnerResult" class="winner"></td></tr>
+                            <tr><td id="totalVotesResult" class="total-votes"></td></tr>
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+
+            <!-- Pie Chart Column -->
+            <div class="col-md-4" id="pieChartContainer" style="display: block;">
+                <div class="div-pie-graph">
+                    <canvas id="pieGraph"></canvas>
+                </div>
+            </div>
+
             <!-- Bar Chart Column -->
-            <div class="col-md-6">
+            <div class="col-md-4" id="barChartContainer" style="display: none;">
                 <div class="div-bar-graph">
                     <canvas id="barGraph"></canvas>
                 </div>
-            </div>
-    
-            <!-- Pie Chart Column -->
-            <div class="col-md-6">
-                <div class="div-pie-graph">
-                    <canvas id="pieChart"></canvas>
-                </div>
-            </div>
+            </div>            
         </div>
 
         <script>
@@ -59,63 +76,7 @@
                 var modifiedUrl = currentUrl.replace(/\/graphics\/.*/, '');
                 window.location.href = modifiedUrl;
             }
-        
-            function createBarChart() {
-                const barGraph = document.querySelector("#barGraph");
-                const barLabels = [{% for opt in results %} '{{opt.option}}', {% endfor %}];
-                const barData = {
-                    labels: barLabels,
-                    datasets: [{
-                        label: "Número de votos",
-                        data: [{% for val in results %} '{{val.votes}}', {% endfor %}],
-                        backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        ],
-                        borderWidth: 1
-                    }]
-                };
-                const barConfig = {
-                    type: 'bar',
-                    data: barData,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                };
-                new Chart(barGraph, barConfig);
-            }
-        
-            function createPieChart() {
-                const pieChart = document.querySelector("#pieChart");
-                const pieLabels = [{% for opt in results %} '{{opt.option}}', {% endfor %}];
-                const pieData = {
-                    labels: pieLabels,
-                    datasets: [{
-                        data: [{% for val in results %} '{{val.votes}}', {% endfor %}],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                        ],
-                        borderWidth: 1
-                    }]
-                };
-                const pieConfig = {
-                    type: 'pie',
-                    data: pieData
-                };
-                new Chart(pieChart, pieConfig);
-            }
-        
+
             function getWinner(results) {
                 const allVotesZero = results.every(result => result.votes === 0);
                 if (results.length === 0 || allVotesZero) {
@@ -138,17 +99,123 @@
                 results.forEach((result) => {
                     totalCount += parseInt(result.votes);
                 });
-                return `Total de votos: ${totalCount}`;
+                return totalCount;
             }
-        
-            createBarChart();
-            createPieChart();
+
+            function toggleCharts() {
+                const chartType = document.getElementById('chartType').value;
+
+                if (chartType === 'bar') {
+                    document.getElementById('barChartContainer').style.display = 'block';
+                    document.getElementById('pieChartContainer').style.display = 'none';
+                } else if (chartType === 'pie') {
+                    document.getElementById('barChartContainer').style.display = 'none';
+                    document.getElementById('pieChartContainer').style.display = 'block';
+                }
+            }
+
+            function createBarChart(results) {
+                const barGraph = document.querySelector("#barGraph");
+                const totalVotes = getTotalVotes(results);
+                const barLabels = [{% for opt in results %} '{{opt.option}}', {% endfor %}];
+                const barData = {
+                    labels: barLabels,
+                    datasets: [{
+                        label: "Número de votos",
+                        data: [{% for val in results %} '{{val.votes}}', {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                const barConfig = {
+                    type: 'bar',
+                    data: barData,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            },
+                            x: {
+                                stacked: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const value = context.raw;
+                                        const percentage = ((value / totalVotes) * 100).toFixed(2);
+                                        return value > 1 ? 
+                                            `${value} votos (${percentage}%)`:
+                                            `${value} voto (${percentage}%)`;
+                                    },
+                                },
+                            },
+                        },
+                    },
+                };
+                return new Chart(barGraph, barConfig);
+            }
+
+            function createPieChart(results) {
+                const pieGraph = document.querySelector("#pieGraph");
+                const totalVotes = getTotalVotes(results);
+                const pieLabels = [{% for opt in results %} '{{opt.option}}', {% endfor %}];
+                const pieData = {
+                    labels: pieLabels,
+                    datasets: [{
+                        data: [{% for val in results %} '{{val.votes}}', {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                const pieConfig = {
+                    type: 'pie',
+                    data: pieData,
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: true,
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const value = context.raw;
+                                        const percentage = ((value / totalVotes) * 100).toFixed(2);
+                                        return value > 1 ? 
+                                            `${value} votos (${percentage}%)`:
+                                            `${value} voto (${percentage}%)`;
+                                    },
+                                },
+                            },
+                        },
+                    },
+                };
+                return new Chart(pieGraph, pieConfig);
+            }    
 
             const results = {{ results|safe }};
+            barChart = createBarChart(results);
+            pieChart = createPieChart(results);
             const winner = getWinner(results);
             const totalVotes = getTotalVotes(results);
             document.getElementById('winnerResult').innerText = `${winner}`;
-            document.getElementById('totalVotesResult').innerText = `${totalVotes}`;
+            document.getElementById('totalVotesResult').innerText = `Total de votos: ${totalVotes}`;
         </script>
     </div>
 {% endblock %}

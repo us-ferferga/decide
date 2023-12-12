@@ -1,0 +1,46 @@
+/* Style for the chart selector and graph containers */
+.div-bar-graph,
+.div-pie-graph {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+/* Style for the result section */
+.div-results {
+    margin-bottom: 20px;
+}
+
+/* Table styling for result section */
+.div-results table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.div-results th, .div-results td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.div-results th {
+    background-color: #f2f2f2;
+}
+
+.div-results tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.div-results tbody tr:hover {
+    background-color: #e5e5e5;
+}
+
+.div-results .winner {
+    color: green;
+}
+
+.div-results .total-votes {
+    font-style: italic;
+}
+

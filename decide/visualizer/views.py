@@ -24,7 +24,7 @@ class VisualizerView(TemplateView):
     
     def graphics(request, voting_id):
         template_graphics = 'graphics/graphics.html'
-        r = mods.get('voting', params={'id': voting_id}) 
+        r = mods.get('voting', params={'id': voting_id})
         context = {
             "voting_id": r[0].get('id'),
             "voting_name": r[0].get('name'),
