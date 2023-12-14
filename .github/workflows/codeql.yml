@@ -1,0 +1,52 @@
+name: GitHub CodeQL 🔬
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    paths-ignore:
+      - "**/*.md"
+  workflow_call:
+  schedule:
+    - cron: "0 0 * * MON,FRI"
+
+jobs:
+  analyze:
+    name: Análisis de CodeQL 🔬
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+          - "javascript-typescript"
+          - "python"
+
+    steps:
+      - name: Clonar ⬇️
+        uses: actions/checkout@v4.1.1
+        with:
+          show-progress: false
+
+      - name: Preparar consultas 🛠️
+        uses: github/codeql-action/init@v2
+        with:
+          queries: security-and-quality
+          languages: ${{ matrix.language }}
+
+      - name: Construir consultas 📦
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Realizar análisis 🧪
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{ matrix.language }}"
