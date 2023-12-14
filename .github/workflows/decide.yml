@@ -1,4 +1,4 @@
-name: Decide checks 🗳️
+name: Decide 🗳️
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -17,12 +17,13 @@ on:
 
 jobs:
   test:
-    name: Test 🧪
+    name: Pruebas unitarias 🧪
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: decide
     strategy:
+      fail-fast: false
       matrix:
         module: 
           - "authentication"
@@ -47,37 +48,38 @@ jobs:
           POSTGRES_DB: decide
         ports:
           - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
+        # Necesario porque el contenedor no tiene comprobaciones de su salud
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - name: Checkout ⬇️
+    - name: Clonar ⬇️
       uses: actions/checkout@v4.1.1
       with:
         show-progress: false
   
-    - name: Setup Python 🐍
+    - name: Configurar Python 🐍
       uses: actions/setup-python@v5.0.0
       with:
         python-version: '3.x'
         check-latest: true
 
-    - name: Install dependencies 📦
+    - name: Instalar dependencias 📦
       run: |
         sudo apt update
         sudo apt install libpq-dev chromium-browser chromium-chromedriver
         echo "pynose==1.4.8" >> ../requirements.txt
         echo "selenium" >> ../requirements.txt
         echo "coverage" >> ../requirements.txt
+        # Necesario a partir de Python 3.12: https://github.com/Becksteinlab/GromacsWrapper/issues/263#issue-1966724749
         echo "setuptools" >> ../requirements.txt
         pip install -r ../requirements.txt
         cp local_settings.gactions.py local_settings.py
 
-    - name: Perform migrations 🗃️
+    - name: Aplicar migraciones 🗃️
       run: |
         python manage.py migrate
 
-    - name: Run unit tests 🔬
+    - name: Ejecutar pruebas 🔬
       run: |
         python manage.py test ${{ matrix.module }}
 

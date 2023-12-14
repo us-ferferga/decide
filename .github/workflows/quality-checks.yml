@@ -1,0 +1,87 @@
+name: Calidad 👌🧪
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**/*.md"
+  workflow_dispatch:
+
+jobs:
+  dependency-review:
+    name: Vulnerabilidades en dependencias 🔎
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar repositorio ⬇️
+        uses: actions/checkout@v4.1.1
+        with:
+          show-progress: false
+
+      - name: Buscar dependencias vulnerables 🦠
+        uses: actions/dependency-review-action@v3.1.4
+
+  conventional_commits:
+    name: Convención de commits 💬
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio ⬇️
+        uses: actions/checkout@v4.1.1
+        with:
+          show-progress: false
+
+      - name: Verificar cumplimiento 📝
+        uses: webiny/action-conventional-commits@v1.2.0
+  
+  run_backend:
+    name: Iniciar 🏃‍♂️
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: decide
+          POSTGRES_PASSWORD: decide
+          POSTGRES_DB: decide
+        ports:
+          - 5432:5432
+        # Necesario porque el contenedor no tiene comprobaciones de su salud
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    defaults:
+      run:
+        working-directory: decide
+
+    steps:
+      - name: Clonar repositorio ⬇️
+        uses: actions/checkout@v4.1.1
+        with:
+          show-progress: false
+
+      - name: Configurar Python 🐍
+        uses: actions/setup-python@v5.0.0
+        with:
+          python-version: '3.x'
+          check-latest: true
+
+      - name: Instalar dependencias 📦
+        run: |
+          # Necesario a partir de Python 3.12: https://github.com/Becksteinlab/GromacsWrapper/issues/263#issue-1966724749
+          echo "setuptools" >> ../requirements.txt
+          pip install -r ../requirements.txt
+
+      - name: Aplicar migraciones 🗃️
+        run: python ./manage.py migrate
+
+      - name: Iniciar servidor de Decide (Django) 🏃‍♂️
+        run: |
+          python manage.py runserver 127.0.0.1:8000 &
+          sleep 10 # Espera a que el servidor esté listo
+
+      - name: Comprobar si responde a peticiones 🩺
+        run: |
+          curl -I http://127.0.0.1:8000/
+          sudo pkill python
