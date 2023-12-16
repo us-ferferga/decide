@@ -25,10 +25,10 @@
             "mode": "auto"
         }
     ],
-    "emmet.includeLanguages": {
-        "vue": "html"
-    },
     "vue.autoInsert.dotValue": true,
     "vue.server.fullCompletionList": true,
-    "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"]
+    "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"],
+    "unocss.root": [
+        "decide/booth/frontend"
+    ]
 }

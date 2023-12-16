@@ -1,10 +1,10 @@
+import { useTitle } from '@vueuse/core';
 import { computed } from 'vue';
 import {
   createRouter,
   createWebHashHistory
 } from 'vue-router/auto';
 import metaGuard from './middlewares/meta';
-import { useTitle } from '@vueuse/core';
 
 const router = createRouter({
   history: createWebHashHistory()

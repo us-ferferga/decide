@@ -1,19 +1,20 @@
-import { resolve } from 'node:path';
-import { defineConfig, UserConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import Icons from 'unplugin-icons/vite';
+import browserslist from 'browserslist';
+import { browserslistToTargets } from 'lightningcss';
+import { resolve } from 'node:path';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { presetUno } from 'unocss';
+import UnoCSS from 'unocss/vite';
 import IconsResolver from 'unplugin-icons/resolver';
-import Components from 'unplugin-vue-components/vite';
-import VueRouter from 'unplugin-vue-router/vite';
+import Icons from 'unplugin-icons/vite';
 import {
+  QuasarResolver,
   VueUseComponentsResolver,
   VueUseDirectiveResolver
 } from 'unplugin-vue-components/resolvers';
-import { presetUno } from 'unocss';
-import UnoCSS from 'unocss/vite';
-import { visualizer } from 'rollup-plugin-visualizer';
-import browserslist from 'browserslist';
-import { browserslistToTargets } from 'lightningcss';
+import Components from 'unplugin-vue-components/vite';
+import VueRouter from 'unplugin-vue-router/vite';
+import { defineConfig, UserConfig } from 'vite';
 
 export default defineConfig(({ mode }): UserConfig => {
   const config: UserConfig = {
@@ -44,7 +45,8 @@ export default defineConfig(({ mode }): UserConfig => {
         resolvers: [
           IconsResolver(),
           VueUseComponentsResolver(),
-          VueUseDirectiveResolver()
+          VueUseDirectiveResolver(),
+          QuasarResolver()
         ]
       }),
       /**

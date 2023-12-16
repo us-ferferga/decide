@@ -1,14 +1,12 @@
 <template>
   <Transition
     v-if="!prefersNoMotion"
-    :name="getTransitionName(route.meta)"
     mode="out-in">
     <!-- This div is required because <transition> requires a single children node -->
     <div
       :key="transitionKey"
       v-bind="$attrs"
-      style="transform-origin: center"
-      class="h-100">
+      style="transform-origin: center">
       <slot />
     </div>
   </Transition>
@@ -16,25 +14,28 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, RouteMeta } from 'vue-router/auto';
 import { prefersNoMotion } from '@/store/globals';
 
 defineProps<{
   transitionKey: string;
 }>();
-
-const route = useRoute();
-
-/**
- * Based on a route's meta.transition properties, return the transition name to use
- */
-function getTransitionName(
-  meta: RouteMeta
-): undefined | string {
-  if (meta.transition?.enter) {
-    return meta.transition.enter;
-  }
-
-  return 'scroll-x-reverse-transition';
-}
 </script>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition-duration: 0.3s ease !important;
+  transition-property: transform, opacity !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.v-leave-to {
+  opacity: 0;
+  transform: translateX(-15px);
+}
+
+.v-enter-from {
+  opacity: 0;
+  transform: translateX(15px);
+}
+</style>
