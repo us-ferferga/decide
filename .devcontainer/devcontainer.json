@@ -24,6 +24,5 @@
   "postAttachCommand": {
     "extensions": "cat .vscode/extensions.json | jq -r .recommendations[] | xargs -n 1 code --install-extension",
     "postgres": "service postgresql start"
-  },
-  "hostRequirements": { "cpus": 4, "memory": "8gb" }
+  }
 }
