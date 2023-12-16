@@ -1,6 +1,6 @@
 {
   "name": "Decide Codespace",
-  "image": "python:latest",
+  "image": "python:slim",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "dockerDashComposeVersion": "v2"
