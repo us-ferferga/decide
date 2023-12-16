@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Etiquetar PR dependiendo de los archivos modificados
-        uses: actions/labeler@v4
+        uses: actions/labeler@v5
         if: ${{ github.event_name == 'pull_request_target' }}
         continue-on-error: true
 
