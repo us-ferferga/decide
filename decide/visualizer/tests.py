@@ -38,8 +38,8 @@ class GraphicsViewTests(BaseTestCase):
     
     def testVotingExists(self):
         v = Voting.objects.get(name='Votacion')
-        self.assertEquals(v.question.options.all()[0].option, "Opcion 1")
-        self.assertEquals(v.postproc['postproc'][0]['votes'], 50)
+        self.assertEqual(v.question.options.all()[0].option, "Opcion 1")
+        self.assertEqual(v.postproc['postproc'][0]['votes'], 50)
 
     def testGraphicsViewWithValidId(self):
         v = Voting.objects.get(name='Votacion')
