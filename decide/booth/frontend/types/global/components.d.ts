@@ -9,7 +9,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     PageView: typeof import('./../../src/components/View/PageView.vue')['default']
     QBtn: typeof import('quasar')['QBtn']
+    QForm: typeof import('quasar')['QForm']
     QInput: typeof import('quasar')['QInput']
+    QRadio: typeof import('quasar')['QRadio']
     QSelect: typeof import('quasar')['QSelect']
     RootView: typeof import('./../../src/components/View/RootView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

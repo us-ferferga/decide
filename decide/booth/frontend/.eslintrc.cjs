@@ -5,7 +5,13 @@ const commonTSAndVueConfig = {
   extends: ['plugin:@typescript-eslint/recommended-requiring-type-checking'],
   rules: {
     // TODO: Investigate why this rule reports false positives
-    '@typescript-eslint/no-misused-promises': 'off'
+    '@typescript-eslint/no-misused-promises': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off'
   }
 };
 
@@ -64,6 +70,7 @@ module.exports = {
     '@typescript-eslint/quotes': ['error', 'single', { 'avoidEscape': true }],
     'comma-dangle': 'error',
     'indent': 'off',
+    'unicorn/error-message': 'off',
     '@typescript-eslint/indent': ['error', 2, {
       'SwitchCase': 1,
       'VariableDeclarator': 2,

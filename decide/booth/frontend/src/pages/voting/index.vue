@@ -9,57 +9,84 @@
 
     <QBtn
       class="mt-2"
-      label="Conectar"
+      label="Continuar"
       rounded
       color="primary"
       :loading="loading"
-      @click="fetchVoting" />
+      @click="async () => fetchVoting()" />
   </div>
 </template>
 
 <script setup lang="ts">
-import router from '@/plugins/router';
-import { endpointUrl, voteData } from '@/store/globals';
+import { serverUrl, voteData } from '@/store/globals';
+import { useQuasar } from 'quasar';
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router/auto';
+import { useRoute, useRouter } from 'vue-router/auto';
 
 const id = ref();
 const loading = ref(false);
 const route = useRoute();
+const router = useRouter();
+const quasar = useQuasar();
 
 /**
+ * Gets the voting data from the server, from params or the user input
  *
+ * @param load - Check for parameters in the ID
  */
-async function fetchVoting(): Promise<void> {
+async function fetchVoting(paramCheck = false): Promise<void> {
   try {
     loading.value = true;
 
-    if (!('id' in route.params)) {
+    if (!('id' in route.params) && paramCheck) {
       throw new TypeError('No parameter id in route');
     }
 
     const response =
-      await fetch(`${endpointUrl.value}/${route.params.id}`, {
+      await fetch(`${serverUrl.value}/api/${paramCheck ? (route.params as { id: string }).id : id.value}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
       });
 
-      if (response.status === 200) {
+    if (response.status === 200) {
+      const payload = await response.json();
+
+      if (payload.voting.id) {
         voteData.value = await response.json();
       }
-  } catch {} finally {
+    }
+
+    throw new Error();
+  } catch {
+    quasar.notify({
+      message: 'Votación no encontrada',
+      color: 'red'
+    });
+  } finally {
     loading.value = false;
+  }
+}
+
+/**
+ * Runs the redirection logic and middleware
+ */
+async function redirect(): Promise<void> {
+  if (voteData.value.voting?.end_date && Date.parse(voteData.value.voting.end_date) < Date.now()) {
+    await router.replace(`/voting/${voteData.value.voting.id}/ended`);
+  } else if (voteData.value) {
+    await router.replace(`/voting/${voteData.value.id.voting.id}/login`);
   }
 }
 
 watch(() => route.params, async () => {
   loading.value = true;
-  await fetchVoting();
+  await fetchVoting(true);
 });
 
-watch(voteData, async () => {
-  await router.replace(`voting/${voteData.value.id.voting.id}`)
-})
+watch(voteData, redirect);
+
+await fetchVoting(true);
+await redirect();
 </script>

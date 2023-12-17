@@ -8,7 +8,7 @@
         outlined
         :options="options" />
       <QInput
-        v-model="serverUrl"
+        v-model="userServerUrl"
         class="ml-2"
         style="flex: 5;"
         outlined
@@ -25,22 +25,24 @@
 </template>
 
 <script setup lang="ts">
-import { endpointUrl } from '@/store/globals';
+import { serverUrl } from '@/store/globals';
+import { useQuasar } from 'quasar';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router/auto';
 
 const router = useRouter();
 const protocol = ref('http://');
-const serverUrl = ref();
+const userServerUrl = ref();
 const loading = ref(false);
 const options = ['http://', 'https://'];
+const quasar = useQuasar();
 
 /**
  * This page simply acts as a middleware
  */
 async function fetchApi(): Promise<void> {
   try {
-    const response = await fetch(endpointUrl.value, {
+    const response = await fetch(`${serverUrl.value}/api`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -50,17 +52,23 @@ async function fetchApi(): Promise<void> {
     if (response.status === 200) {
       await router.replace('/voting');
     }
-  } catch {} finally {
+  } catch {
+    quasar.notify({
+      message: 'No se ha podido conectar con el servidor',
+      color: 'red'
+    });
+    serverUrl.value = '';
+  } finally {
     loading.value = false;
   }
 }
 
 /**
- *
+ * Connects to the given server
  */
 async function connect(): Promise<void> {
   loading.value = true;
-  endpointUrl.value = `${protocol.value}${serverUrl.value}`;
+  serverUrl.value = `${protocol.value}${serverUrl.value}`;
   await fetchApi();
 }
 
