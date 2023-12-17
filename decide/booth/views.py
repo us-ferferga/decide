@@ -40,7 +40,7 @@ class PingView(APIView):
     """
     Simplemente devuelve un 200 OK para que el cliente sepa que el servidor está activo y existe una API REST disponible
     """
-    def get():
+    def get(self, request):
         return Response(status=status.HTTP_200_OK)
     
 class BoothApiView(APIView):
@@ -54,7 +54,7 @@ class BoothApiView(APIView):
 
             voting_data = r[0]
         except:
-            return Response(status=status.HTTP_404_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         keybits = settings.KEYBITS
 
