@@ -4,7 +4,7 @@
     <QBtn
       class="mt-2 mb-2 pa-2"
       color="primary"
-      disabled
+      disable
       :href="`/accounts/github/login/?next=${fullPath}`">
       <IMdiGitHub />
       <div>
@@ -15,7 +15,6 @@
     <QInput
       v-model="user"
       outlined
-      number
       label="Usuario" />
     <QInput
       v-model="password"

@@ -20,6 +20,7 @@
 			]
 		},
 		"types": [
+			"vitest/globals",
 			"axios",
 			"unplugin-icons/types/vue",
 			"vite/client",

@@ -1,6 +1,6 @@
-import { Notify, QuasarPluginOptions } from "quasar";
+import { Notify, QuasarPluginOptions } from 'quasar';
 import quasarLang from 'quasar/lang/es';
-import quasarIconSet from "./material-icons";
+import quasarIconSet from './material-icons';
 
 export default {
   plugins: {
