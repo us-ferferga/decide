@@ -35,7 +35,7 @@ export const userData = ref();
 export const token = ref('');
 const now = useNow();
 export const isFinished = computed(() => {
-  if (voteData.value.voting?.end_date) {
+  if (voteData.value?.voting?.end_date) {
     return now.value > new Date(voteData.value.voting.end_date);
   }
 
