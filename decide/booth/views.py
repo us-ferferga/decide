@@ -25,7 +25,7 @@ class BoothView(TemplateView):
                 r[0]['pub_key'][k] = str(v)
 
             context['voting'] = json.dumps(r[0])
-        except:
+        except Exception:
             raise Http404
 
         context['KEYBITS'] = settings.KEYBITS
@@ -53,7 +53,7 @@ class BoothApiView(APIView):
                 r[0]['pub_key'][k] = str(v)
 
             voting_data = r[0]
-        except:
+        except Exception:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         keybits = settings.KEYBITS
