@@ -14,12 +14,20 @@ import {
 } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import VueRouter from 'unplugin-vue-router/vite';
-import { defineConfig, UserConfig } from 'vite';
+import { UserConfig, defineConfig } from 'vite';
 
 export default defineConfig(({ mode }): UserConfig => {
   const config: UserConfig = {
     appType: 'spa',
     base: './',
+    test: {
+    // Enable jest-like global test APIs
+      globals: true,
+      /*
+       * Simulate DOM with happy-dom
+       */
+      environment: 'happy-dom'
+    },
     plugins: [
       VueRouter({
         dts: './types/global/routes.d.ts',
