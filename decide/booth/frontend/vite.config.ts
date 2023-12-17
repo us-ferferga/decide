@@ -19,7 +19,7 @@ import { UserConfig, defineConfig } from 'vite';
 export default defineConfig(({ mode }): UserConfig => {
   const config: UserConfig = {
     appType: 'spa',
-    base: './',
+    base: '/',
     test: {
     // Enable jest-like global test APIs
       globals: true,
@@ -86,7 +86,9 @@ export default defineConfig(({ mode }): UserConfig => {
                 brotliSize: true
               })
               : undefined
-          ]
+          ],
+          assetFileNames: 'static/new/[name]-[hash][extname]',
+          entryFileNames: 'static/new/[name]-[hash].js'
         }
       }
     },
