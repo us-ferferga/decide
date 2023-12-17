@@ -21,10 +21,11 @@ import '@fontsource/jost';
 import '@unocss/reset/normalize.css';
 import '@unocss/reset/sanitize/assets.css';
 import '@unocss/reset/sanitize/sanitize.css';
+import '@unocss/reset/tailwind.css';
 import 'quasar/dist/quasar.css';
 import 'virtual:uno.css';
 
-/* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
+
 const app = createApp(Root);
 
 app.use(router);
