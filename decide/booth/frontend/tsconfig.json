@@ -34,6 +34,7 @@
 		"src/**/*.d.ts",
 		"src/**/*.vue",
 		"**/**/*.json",
+		"tests/**/*.ts",
 		"types/**/*.d.ts",
 		".eslintrc.cjs",
 		"*.ts"

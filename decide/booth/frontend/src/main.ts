@@ -5,12 +5,11 @@
  */
 
 import Root from '@/App.vue';
-import { Notify, Quasar } from 'quasar';
-import quasarLang from 'quasar/lang/es';
+import { Quasar } from 'quasar';
 import { createApp } from 'vue';
 /* eslint-disable @typescript-eslint/no-restricted-imports */
-import quasarIconSet from '@/plugins/quasar/material-icons';
 import router from '@/plugins/router';
+import quasarOptions from './plugins/quasar';
 /* eslint-enable @typescript-eslint/no-restricted-imports */
 
 /**
@@ -29,25 +28,7 @@ import 'virtual:uno.css';
 const app = createApp(Root);
 
 app.use(router);
-app.use(Quasar, {
-  plugins: {
-    Notify
-  },
-  config: {
-    brand: {
-      primary: '#000000',
-      secondary: '#0d8276',
-      accent: '#9C27B0',
-      dark: '#1d1d1d',
-      positive: '#21BA45',
-      negative: '#C10015',
-      info: '#1a6473',
-      warning: '#F2C037'
-    }
-  },
-  lang: quasarLang,
-  iconSet: quasarIconSet
-});
+app.use(Quasar, quasarOptions);
 
 await router.isReady();
 app.mount('#app');
