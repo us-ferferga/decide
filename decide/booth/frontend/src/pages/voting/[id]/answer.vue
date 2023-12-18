@@ -48,11 +48,13 @@
 
 <script setup lang="ts">
 import { serverUrl, token, userData, voteData } from '@/store/globals';
+import { useQuasar } from 'quasar';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router/auto';
 
 const selection = ref();
 const router = useRouter();
+const quasar = useQuasar();
 const loading = ref(false);
 
 /**
@@ -74,7 +76,7 @@ async function submit(): Promise<void> {
       token: token.value
     };
 
-    await fetch(`${serverUrl.value}/gateway/store`, {
+    const responsePost = await fetch(`${serverUrl.value}/gateway/store/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,8 +85,17 @@ async function submit(): Promise<void> {
       body: JSON.stringify(data)
     });
 
-    await router.replace(`/voting/${voteData.value?.voting.id}/thankyou`);
-  } catch {} finally {
+    if (responsePost.status === 200) {
+      await router.replace(`/voting/${voteData.value?.voting.id}/thankyou`);
+    } else {
+      throw new Error();
+    }
+  } catch {
+    quasar.notify({
+      message: 'Error al enviar la votación',
+      color: 'red'
+    });
+  } finally {
     loading.value = false;
   }
 }
