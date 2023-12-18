@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { serverUrl, voteData } from '@/store/globals';
+import { isFinished, serverUrl, voteData } from '@/store/globals';
 import { useQuasar } from 'quasar';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router/auto';
@@ -43,7 +43,7 @@ async function fetchVoting(paramCheck = false): Promise<void> {
     }
 
     const response =
-      await fetch(`${serverUrl.value}/api/${paramCheck ? (route.params as { id: string }).id : id.value}`, {
+      await fetch(`${serverUrl.value}/booth/api/${paramCheck ? (route.params as { id: string }).id : id.value}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -54,11 +54,11 @@ async function fetchVoting(paramCheck = false): Promise<void> {
       const payload = await response.json();
 
       if (payload.voting.id) {
-        voteData.value = await response.json();
+        voteData.value = payload;
       }
+    } else {
+      throw new Error();
     }
-
-    throw new Error();
   } catch {
     quasar.notify({
       message: 'Votación no encontrada',
@@ -73,10 +73,10 @@ async function fetchVoting(paramCheck = false): Promise<void> {
  * Runs the redirection logic and middleware
  */
 async function redirect(): Promise<void> {
-  if (voteData.value.voting?.end_date && Date.parse(voteData.value.voting.end_date) < Date.now()) {
-    await router.replace(`/voting/${voteData.value.voting.id}/ended`);
+  if (isFinished.value) {
+    await router.replace(`/voting/${voteData.value?.voting.id}/ended`);
   } else if (voteData.value) {
-    await router.replace(`/voting/${voteData.value.id.voting.id}/login`);
+    await router.replace(`/voting/${voteData.value.voting.id}/login`);
   }
 }
 

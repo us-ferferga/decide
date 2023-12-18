@@ -1,12 +1,21 @@
 <template>
   <div class="flex justify-center flex-col">
-    <h2>{{ voteData.voting.name }}</h2>
-    <h1 class="text-subtitle1">
+    <h2 v-if="voteData?.voting?.name">
+      {{ voteData.voting.name }}
+    </h2>
+    <h2
+      v-if="voteData?.voting?.desc"
+      class="text-subtitle1">
+      {{ voteData.voting.desc }}
+    </h2>
+    <h3
+      v-if="voteData?.voting?.question?.desc"
+      class="text-subtitle2">
       {{ voteData.voting.question.desc }}
-    </h1>
+    </h3>
     <QForm class="flex flex-col">
       <template
-        v-for="opt, index in voteData.voting.question.options"
+        v-for="opt, index in voteData?.voting.question.options"
         :key="`${opt.number}-${index}`">
         <QRadio
           v-model="selection"
@@ -21,6 +30,7 @@
         class="mt-2 text-black"
         color="yellow"
         rounded
+        :disable="loading"
         @click="selection = undefined">
         Restablecer respuesta
       </QBtn>
@@ -28,6 +38,7 @@
         class="mt-2"
         color="green"
         rounded
+        :loading="loading"
         @click.prevent="submit">
         Enviar
       </QBtn>
@@ -37,7 +48,7 @@
 
 <script setup lang="ts">
 import { serverUrl, token, userData, voteData } from '@/store/globals';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router/auto';
 
 const selection = ref();
@@ -55,15 +66,15 @@ async function submit(): Promise<void> {
     const bigmsg = BigInt.fromJSONObject(selection.value.toString());
     // @ts-expect-error - Added at runtime
     // eslint-disable-next-line no-undef
-    const cipher = ElGamal.encrypt(voteData.value.voting.bigPk, bigmsg);
+    const cipher = ElGamal.encrypt(voteData.value.voting.bigpk, bigmsg);
     const data = {
       vote: {a: cipher.alpha.toString(), b: cipher.beta.toString()},
-      voting: voteData.value.voting.id,
+      voting: voteData.value?.voting.id,
       voter: userData.value.id,
       token: token.value
     };
 
-    await fetch(`${serverUrl.value}/gateway/store/`, {
+    await fetch(`${serverUrl.value}/gateway/store`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,10 +83,21 @@ async function submit(): Promise<void> {
       body: JSON.stringify(data)
     });
 
-    await router.replace(`/voting/${voteData.value.voting.id}/thankyou`);
+    await router.replace(`/voting/${voteData.value?.voting.id}/thankyou`);
   } catch {} finally {
     loading.value = false;
   }
-
 }
+
+/**
+ * Acts as a middleware for the page
+ */
+async function middleware(): Promise<void> {
+  if (!token.value || !userData.value || !voteData.value) {
+    await router.replace('/');
+  }
+}
+
+watch([serverUrl, token, userData, voteData], middleware);
+await middleware();
 </script>
