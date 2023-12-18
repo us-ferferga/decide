@@ -19,12 +19,14 @@
     <QInput
       v-model="password"
       outlined
+      type="password"
       class="mt-2"
       label="Contraseña" />
     <QBtn
       class="mt-2"
       color="blue"
       rounded
+      :loading="loading"
       @click="setSubmit">
       Iniciar sesión
     </QBtn>
@@ -71,10 +73,14 @@ async function setSubmit(): Promise<void> {
 
     const responseGetUser = await fetch(`${serverUrl.value}/gateway/authentication/getuser/`,
                                         {
+                                          method: 'POST',
                                           headers:{
                                             'Authorization': `Token ${token.value}`,
                                             'Content-Type': 'application/json'
-                                          }
+                                          },
+                                          body: JSON.stringify({
+                                            token: token.value
+                                          })
                                         });
 
     userData.value = await responseGetUser.json();

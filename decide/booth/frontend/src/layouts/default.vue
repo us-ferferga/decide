@@ -43,7 +43,7 @@ async function logoutUser(): Promise<void> {
  */
 watch(isFinished, async (value) => {
   if (value) {
-    await router.replace(`/voting/${voteData.value.voting.id}/ended`);
+    await router.replace(`/voting/${voteData.value?.voting.id}/ended`);
   }
 });
 </script>

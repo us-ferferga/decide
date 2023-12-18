@@ -42,7 +42,7 @@ const quasar = useQuasar();
  */
 async function fetchApi(): Promise<void> {
   try {
-    const response = await fetch(`${serverUrl.value}/api`, {
+    const response = await fetch(`${serverUrl.value}/booth/api`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
