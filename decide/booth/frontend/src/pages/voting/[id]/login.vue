@@ -24,7 +24,7 @@
       label="Contraseña" />
     <QBtn
       class="mt-2"
-      color="blue"
+      color="red"
       rounded
       :loading="loading"
       @click="setSubmit">
